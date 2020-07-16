@@ -19,6 +19,7 @@ RUN apt-get install -y llvm
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 RUN apt-get install -y gcovr lcov
+RUN apt-get install -y unzip
 
 # Install all dependencies from pip
 RUN pip3 install --upgrade pip
@@ -58,3 +59,10 @@ RUN echo 'higgs-boson:password' | chpasswd
 RUN adduser higgs-boson sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER higgs-boson
+
+# Download Higgs-Boson for internal Docker-Builds
+RUN mkdir -p /home/higgs-boson/higgs-boson
+RUN wget https://github.com/bitboson/higgs-boson/releases/download/v0.0.0-bootstrap/higgs-boson.default.hbsn -P /home/higgs-boson
+RUN unzip /home/higgs-boson/higgs-boson.default.hbsn -d /home/higgs-boson/
+ENV LD_LIBRARY_PATH="/home/higgs-boson/higgs-boson/default/deps:/home/higgs-boson/higgs-boson/default/lib:${LD_LIBRARY_PATH}"
+ENV PATH="/home/higgs-boson/higgs-boson/default/bin:${PATH}"

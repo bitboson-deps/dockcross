@@ -1,0 +1,60 @@
+# Use Ubuntu Linux (18.04) as the image
+FROM ubuntu:18.04
+
+# Update/Upgrade the image
+RUN apt-get update -y
+RUN apt-get upgrade -y
+
+# Install all dependencies from APT-GET
+RUN apt-get install -y cmake
+RUN apt-get install -y gcc g++
+RUN apt-get install -y make
+RUN apt-get install -y git
+RUN apt-get install -y libc-dev
+RUN apt-get install -y autoconf
+RUN apt-get install -y libtool
+RUN apt-get install -y linux-headers-generic
+RUN apt-get install -y clang-6.0
+RUN apt-get install -y llvm
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN apt-get install -y gcovr lcov
+
+# Install all dependencies from pip
+RUN pip3 install --upgrade pip
+RUN pip3 install peru
+
+# Install gdb-server requirements
+RUN apt-get install -y gdbserver
+
+# Create references directory
+RUN apt-get install -y wget
+RUN mkdir -p /refs
+
+# Create a directory and file for root
+RUN mkdir -p /tmp/rootdir
+RUN echo "Howdy Y\'all" > /tmp/rootdir/rootfile
+RUN echo "Howdy Y\'all" > /tmp/rootfile
+RUN chown root:root /tmp/rootdir/rootfile
+RUN chown root:root /tmp/rootdir
+RUN chown root:root /tmp/rootfile
+
+# Setup the SSH Server for Remote Development
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN apt-get install -y openssh-server rsync gdb sudo
+RUN mkdir /var/run/sshd
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+RUN rm -rf /etc/ssh/ssh_host_rsa_key
+RUN rm -rf /etc/ssh/ssh_host_ecdsa_key
+RUN rm -rf /etc/ssh/ssh_host_ed25519_key
+RUN ssh-keygen -A
+
+# Create higgs-boson user and group
+RUN useradd -d /home/higgs-boson -ms /bin/bash higgs-boson
+RUN echo 'higgs-boson:password' | chpasswd
+RUN adduser higgs-boson sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER higgs-boson

@@ -200,7 +200,6 @@ elif [ -n "$MSYS" ]; then
     HOST_PWD=${HOST_PWD/\//:\/}
 else
     HOST_PWD=$PWD
-    [ -L $HOST_PWD ] && HOST_PWD=$(readlink $HOST_PWD)
 fi
 
 # Mount Additional Volumes
@@ -219,8 +218,8 @@ fi
 TTY_ARGS=
 tty -s && [ -z "$MSYS" ] && TTY_ARGS=-ti
 CONTAINER_NAME=dockcross_$RANDOM
-docker run $TTY_ARGS --name $CONTAINER_NAME \
-    -v "$HOST_PWD":/work \
+docker run --rm -w "$HOST_PWD" $TTY_ARGS --name $CONTAINER_NAME \
+    -v "$HOST_PWD":"$HOST_PWD" \
     $HOST_VOLUMES \
     "${USER_IDS[@]}" \
     $FINAL_ARGS \

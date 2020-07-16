@@ -57,6 +57,14 @@ images: base $(IMAGES)
 test: base.test $(addsuffix .test,$(IMAGES))
 
 #
+# higgs-boson
+#
+
+higgs-boson:
+	$(DOCKER) build -t bitboson/higgs-builder \
+		-f Dockerfile.higgs-boson .
+
+#
 # Generic Targets (can specialize later).
 #
 

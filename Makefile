@@ -57,6 +57,27 @@ images: base $(IMAGES)
 test: base.test $(addsuffix .test,$(IMAGES))
 
 #
+# osxcross package sdk
+#
+osxcross-pkg:
+	$(DOCKER) build -t bitboson/osxcross-pkg \
+		-f Dockerfile.osxcross .
+
+#
+# x86_64-apple-darwin compiler image
+#
+x86_64-apple-darwin:
+	$(DOCKER) build -t dockcross/x86_64-apple-darwin \
+		-f Dockerfile.x86_64-apple-darwin .
+
+#
+# i386-apple-darwin compiler image
+#
+i386-apple-darwin:
+	$(DOCKER) build -t dockcross/i386-apple-darwin \
+		-f Dockerfile.i386-apple-darwin .
+
+#
 # higgs-boson
 #
 

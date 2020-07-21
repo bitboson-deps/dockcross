@@ -1,0 +1,44 @@
+# Use Ubuntu Linux (18.04) as the image
+FROM ubuntu:18.04
+
+# Update/Upgrade the image
+RUN apt-get update -y
+RUN apt-get upgrade -y
+
+# Install all dependencies from APT-GET
+RUN apt-get install -y cmake
+RUN apt-get install -y gcc g++
+RUN apt-get install -y make
+RUN apt-get install -y git
+RUN apt-get install -y libc-dev
+RUN apt-get install -y autoconf
+RUN apt-get install -y libtool
+RUN apt-get install -y linux-headers-generic
+RUN apt-get install -y clang-6.0
+RUN apt-get install -y llvm
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN apt-get install -y gcovr lcov
+RUN apt-get install -y unzip
+RUN apt-get install -y clang
+RUN apt-get install -y libssl-dev
+RUN apt-get install -y lzma-dev
+RUN apt-get install -y libxml2-dev
+RUN apt-get install -y cpio
+RUN apt-get install -y liblzma-dev
+RUN apt-get install -y libbz2-dev
+
+COPY ./osxcross /osxcross
+
+RUN cd osxcross && UNATTENDED=1 ./build.sh
+ENV PATH="/osxcross/target/bin:${PATH}"
+
+ENV CROSS_TRIPLE=x86_64-apple-darwin19
+ENV CROSS_ROOT=/osxcross/target
+ENV AS=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-as \
+    AR=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ar \
+    CC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-clang \
+    CPP=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-cpp \
+    CXX=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-clang++ \
+    LD=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-ld \
+    FC=${CROSS_ROOT}/bin/${CROSS_TRIPLE}-gfortran

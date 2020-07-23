@@ -66,3 +66,13 @@ RUN wget https://github.com/bitboson/higgs-boson/releases/download/v0.0.0-bootst
 RUN unzip /home/higgs-boson/higgs-boson.default.hbsn -d /home/higgs-boson/
 ENV LD_LIBRARY_PATH="/home/higgs-boson/higgs-boson/default/deps:/home/higgs-boson/higgs-boson/default/lib:${LD_LIBRARY_PATH}"
 ENV PATH="/home/higgs-boson/higgs-boson/default/bin:${PATH}"
+
+# Check-out the latest Higgs-Boson project and build it using the bootstrap one
+RUN mkdir -p /home/higgs-boson/higgs-boson-latest/
+RUN git clone https://github.com/bitboson/higgs-boson.git /home/higgs-boson/higgs-boson-latest/
+RUN cd /home/higgs-boson/higgs-boson-latest/ && higgs-boson download internal
+RUN cd /home/higgs-boson/higgs-boson-latest/ && higgs-boson build-deps internal default
+RUN cd /home/higgs-boson/higgs-boson-latest/ && higgs-boson build internal default
+RUN rm -rf /home/higgs-boson/higgs-boson/default/deps && cp -r /home/higgs-boson/higgs-boson-latest/output/default/deps/ /home/higgs-boson/higgs-boson/default/deps
+RUN rm -rf /home/higgs-boson/higgs-boson/default/lib && cp -r /home/higgs-boson/higgs-boson-latest/output/default/lib/ /home/higgs-boson/higgs-boson/default/lib
+RUN rm -rf /home/higgs-boson/higgs-boson/default/bin && cp -r /home/higgs-boson/higgs-boson-latest/output/default/bin/ /home/higgs-boson/higgs-boson/default/bin

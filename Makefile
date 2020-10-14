@@ -86,6 +86,14 @@ higgs-boson:
 		-f Dockerfile.higgs-boson .
 
 #
+# higgs-boson (interactive)
+#
+
+higgs-boson-interactive:
+	$(DOCKER) build -t bitboson/higgs-builder \
+		-f Dockerfile.higgs-boson --interactive .
+
+#
 # Generic Targets (can specialize later).
 #
 

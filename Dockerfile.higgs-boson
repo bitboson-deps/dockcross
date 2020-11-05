@@ -20,6 +20,7 @@ RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 RUN apt-get install -y gcovr lcov
 RUN apt-get install -y unzip
+RUN apt-get install -y valgrind
 
 # Install all dependencies from pip
 RUN pip3 install --upgrade pip

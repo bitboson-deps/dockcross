@@ -62,8 +62,10 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER higgs-boson
 
 # Check-out the latest Higgs-Boson project and build it using standard tooling
-RUN mkdir -p /home/higgs-boson/higgs-boson
-RUN git clone https://github.com/bitboson/higgs-boson.git /home/higgs-boson/higgs-boson/
-RUN cd /home/higgs-boson/higgs-boson/ && make build
+RUN mkdir -p /home/higgs-boson/higgs-boson/manual/bin
+RUN mkdir -p /home/higgs-boson/higgs-boson/manual/lib
+RUN mkdir -p /home/higgs-boson/higgs-boson/manual/deps
+COPY bin/* /home/higgs-boson/higgs-boson/manual/bin/
+COPY deps/* /home/higgs-boson/higgs-boson/manual/deps/
 ENV LD_LIBRARY_PATH="/home/higgs-boson/higgs-boson/manual/deps:/home/higgs-boson/higgs-boson/manual/lib:${LD_LIBRARY_PATH}"
 ENV PATH="/home/higgs-boson/higgs-boson/manual/bin:${PATH}"
